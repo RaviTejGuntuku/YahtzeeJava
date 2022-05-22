@@ -71,13 +71,11 @@ public class Main {
             System.out.println();
 
             boolean appendedScoreSuccessfully = false;
-            boolean didBreak = false;
             do {
                 ArrayList<String> possibleCategories = scoreKeeper.getPossibleCategories(currentPlayer);
 
                 if (possibleCategories.size() == 0) {
                     System.out.println("No possible categories");
-                    didBreak = true;
                     break;
                 }
 

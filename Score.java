@@ -159,6 +159,9 @@ public class Score {
             }
         }
 
+        if (flag != true)
+            return false;
+
         scoreCard[8][currentPlayer] = sumOfTopCard()[currentPlayer - 1];
 
         if ((int) scoreCard[8][currentPlayer] > 63)
@@ -177,8 +180,8 @@ public class Score {
 
         int[] totalPlayerScores = new int[2];
 
-        for (int r = 8; r < scoreCard.length; r++) {
-            for (int c = 1; c < scoreCard[0].length; c++) {
+        for (int c = 1; c < scoreCard[0].length; c++) {
+            for (int r = 8; r < scoreCard.length - 1; r++) {
 
                 Object currentElement = scoreCard[r][c];
                 String elementClass = currentElement.getClass().getName();
@@ -242,24 +245,6 @@ public class Score {
             return 0;
     }
 
-    private int removeDuplicates(int a[], int n) {
-        if (n == 0 || n == 1) {
-            return n;
-        }
-
-        int j = 0;
-
-        for (int i = 0; i < n - 1; i++) {
-            if (a[i] != a[i + 1]) {
-                a[j++] = a[i];
-            }
-        }
-
-        a[j++] = a[n - 1];
-
-        return j;
-    }
-
     private boolean isThreeOfKind() {
 
         int similarCountOuter = 1;
@@ -273,7 +258,7 @@ public class Score {
                 similarCountOuter = similarCountInner;
         }
 
-        if (similarCountOuter >= 4)
+        if (similarCountOuter >= 3)
             return true;
         return false;
 
@@ -342,37 +327,79 @@ public class Score {
 
     }
 
+    private ArrayList<Integer> removeDuplicates(ArrayList<Integer> list) {
+
+        ArrayList<Integer> newList = new ArrayList<Integer>();
+
+        for (Integer element : list) {
+
+            if (!newList.contains(element)) {
+
+                newList.add(element);
+            }
+        }
+
+        return newList;
+    }
+
     private boolean isSmallStraight() {
-        Arrays.sort(diceValues);
+
+        Integer[] diceValues = new Integer[5];
+
+        for (int i = 0; i < Score.diceValues.length; i++) {
+            diceValues[i] = Score.diceValues[i];
+        }
+
+        ArrayList<Integer> diceValuesCopy = new ArrayList<Integer>();
+
+        Collections.addAll(diceValuesCopy, diceValues);
+        Collections.sort(diceValuesCopy);
+
+        diceValuesCopy = removeDuplicates(diceValuesCopy);
 
         int exceptionCounter = 0;
 
-        for (int i = 0; i < diceValues.length - 1; i++) {
+        if (diceValuesCopy.size() < 4)
+            return false;
 
-            int currentValue = diceValues[i];
-            int nextValue = diceValues[i + 1];
+        for (int i = 0; i < diceValuesCopy.size() - 1; i++) {
+
+            int currentValue = diceValuesCopy.get(i);
+            int nextValue = diceValuesCopy.get(i + 1);
             if (nextValue != currentValue + 1) {
-                if (nextValue == currentValue)
-                    exceptionCounter++;
-                else
-                    return false;
+                exceptionCounter++;
             }
 
         }
 
-        if (diceValues.length - exceptionCounter >= 4)
+        if (diceValuesCopy.size() - exceptionCounter >= 4)
             return true;
         else
             return false;
     }
 
     private boolean isLargeStraight() {
-        Arrays.sort(diceValues);
 
-        for (int i = 0; i < diceValues.length - 1; i++) {
+        Integer[] diceValues = new Integer[5];
 
-            int currentValue = diceValues[i];
-            int nextValue = diceValues[i + 1];
+        for (int i = 0; i < Score.diceValues.length; i++) {
+            diceValues[i] = Score.diceValues[i];
+        }
+
+        ArrayList<Integer> diceValuesCopy = new ArrayList<Integer>();
+
+        Collections.addAll(diceValuesCopy, diceValues);
+        Collections.sort(diceValuesCopy);
+
+        diceValuesCopy = removeDuplicates(diceValuesCopy);
+
+        if (diceValuesCopy.size() < 5)
+            return false;
+
+        for (int i = 0; i < diceValuesCopy.size() - 1; i++) {
+
+            int currentValue = diceValuesCopy.get(i);
+            int nextValue = diceValuesCopy.get(i + 1);
             if (nextValue != currentValue + 1) {
                 return false;
             }

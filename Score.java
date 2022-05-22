@@ -103,12 +103,47 @@ public class Score {
             int tentitativeScoreForPlayerInt = (int) tentitativeScoreForPlayer;
             int finalScoreForPlayerInt = (int) finalScoreForPlayer;
 
-            if (tentitativeScoreForPlayerInt == 0 || finalScoreForPlayerInt != 0)
+            if (tentitativeScoreForPlayerInt == 0)
                 continue;
+
+            if (finalScoreForPlayerInt != 0) {
+                if (!currentElementScoreLabel.equals("YAHTZEE")) {
+                    continue;
+                }
+            }
 
             currentElementScoreLabel = currentElementScoreLabel.replaceAll("\\s", "");
             currentElementScoreLabel = currentElementScoreLabel.toLowerCase();
             possibleCategories.add(currentElementScoreLabel);
+
+        }
+
+        if (possibleCategories.isEmpty()) {
+
+            for (int r = 1; r < scoreCard.length; r++) {
+
+                String currentElementScoreLabel = (String) scoreCard[r][0];
+
+                if (currentElementScoreLabel.equals("Sum") || currentElementScoreLabel.equals("Bonus")
+                        || currentElementScoreLabel.equals("Total"))
+                    continue;
+
+                Object tentitativeScoreForPlayer = tentitativeObjects[r][playerNumber];
+                Object finalScoreForPlayer = scoreCard[r][playerNumber];
+
+                if (!tentitativeScoreForPlayer.getClass().getName().equals("java.lang.Integer"))
+                    continue;
+
+                int finalScoreForPlayerInt = (int) finalScoreForPlayer;
+
+                if (finalScoreForPlayerInt != 0)
+                    continue;
+
+                currentElementScoreLabel = currentElementScoreLabel.replaceAll("\\s", "");
+                currentElementScoreLabel = currentElementScoreLabel.toLowerCase();
+                possibleCategories.add(currentElementScoreLabel);
+
+            }
 
         }
 

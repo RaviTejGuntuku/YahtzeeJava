@@ -3,6 +3,9 @@ import java.util.*;
 public class Score {
     private static int[] diceValues;
 
+    private ArrayList<String> usedCategoriesPlayer1 = new ArrayList<String>();
+    private ArrayList<String> usedCategoriesPlayer2 = new ArrayList<String>();
+
     private Object[][] scoreCard = {
             { "", "PLAYER_1", "PLAYER_2" },
             { "Aces", 0, 0 },
@@ -86,6 +89,18 @@ public class Score {
         Object[][] tentitativeObjects = getTentitativeScore(playerNumber);
         ArrayList<String> possibleCategories = new ArrayList<String>();
 
+        ArrayList<String> usedCategories = new ArrayList<String>();
+
+        if (playerNumber == 1) {
+            for (int i = 0; i < usedCategoriesPlayer1.size(); i++) {
+                usedCategories.add(usedCategoriesPlayer1.get(i));
+            }
+        } else if (playerNumber == 2) {
+            for (int i = 0; i < usedCategoriesPlayer2.size(); i++) {
+                usedCategories.add(usedCategoriesPlayer2.get(i));
+            }
+        }
+
         for (int r = 1; r < scoreCard.length; r++) {
 
             String currentElementScoreLabel = (String) scoreCard[r][0];
@@ -100,21 +115,14 @@ public class Score {
             if (!tentitativeScoreForPlayer.getClass().getName().equals("java.lang.Integer"))
                 continue;
 
-            int tentitativeScoreForPlayerInt = (int) tentitativeScoreForPlayer;
-            int finalScoreForPlayerInt = (int) finalScoreForPlayer;
-
-            if (tentitativeScoreForPlayerInt == 0)
-                continue;
-
-            if (finalScoreForPlayerInt != 0) {
-                if (!currentElementScoreLabel.equals("YAHTZEE")) {
-                    continue;
-                }
-            }
-
             currentElementScoreLabel = currentElementScoreLabel.replaceAll("\\s", "");
             currentElementScoreLabel = currentElementScoreLabel.toLowerCase();
-            possibleCategories.add(currentElementScoreLabel);
+
+            if ((int) tentitativeScoreForPlayer != 0 && (int) finalScoreForPlayer == 0) {
+                if (usedCategories.indexOf(currentElementScoreLabel) == -1) {
+                    possibleCategories.add(currentElementScoreLabel);
+                }
+            }
 
         }
 
@@ -141,7 +149,10 @@ public class Score {
 
                 currentElementScoreLabel = currentElementScoreLabel.replaceAll("\\s", "");
                 currentElementScoreLabel = currentElementScoreLabel.toLowerCase();
-                possibleCategories.add(currentElementScoreLabel);
+
+                if (usedCategories.indexOf(currentElementScoreLabel) == -1) {
+                    possibleCategories.add(currentElementScoreLabel);
+                }
 
             }
 
@@ -188,6 +199,10 @@ public class Score {
 
                 if (currentScoreLabel.equals(categoryName)) {
                     scoreCard[r][currentPlayer] = tentitativeScore[r][currentPlayer];
+                    if (currentPlayer == 1)
+                        usedCategoriesPlayer1.add(currentScoreLabel);
+                    else if (currentPlayer == 2)
+                        usedCategoriesPlayer2.add(currentScoreLabel);
                     flag = true;
                     break;
                 }
@@ -253,18 +268,10 @@ public class Score {
     }
 
     public boolean isGameOver() {
-        for (Object[] r : scoreCard) {
-            for (Object e : r) {
-                String elementClass = e.getClass().getName();
-                if (!elementClass.equals("java.lang.Integer"))
-                    continue;
-
-                if ((int) e == 0)
-                    return false;
-            }
-        }
-
-        return true;
+        if (getPossibleCategories(1).isEmpty() && getPossibleCategories(2).isEmpty())
+            return true;
+        else
+            return false;
     }
 
     public int winningPlayer() {

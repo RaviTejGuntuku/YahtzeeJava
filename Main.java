@@ -104,7 +104,7 @@ public class Main {
                 currentPlayer = 1;
         }
 
-        System.out.print("Game Over!");
+        System.out.print("Game Over! ");
         if (scoreKeeper.winningPlayer() == 1) {
             System.out.println(players[0] + " won the game!");
         } else if (scoreKeeper.winningPlayer() == 2) {

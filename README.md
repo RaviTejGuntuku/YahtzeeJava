@@ -7,5 +7,7 @@ Here is a link to a demo of the game: https://cardgames.io/yahtzee/
 To run my development of the Yahtzee game, clone the repository and compile & run the Main.java file:
 
 ```
+git clone https://github.com/RaviTejGuntuku/YahtzeeJava.git
+cd YahtzeeJava
 javac Main.java && java Main
 ```

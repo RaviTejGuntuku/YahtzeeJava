@@ -4,7 +4,7 @@ Yahtzee is a dice game where a player rolls 5 dice and tries to get certain comb
 
 Here is a link to a demo of the game: https://cardgames.io/yahtzee/
 
-To run my development of the Yahtzee game, clone the repository and compile & run the Main.java file:
+To run my development of the Yahtzee game, clone the repository and compile & run the Main.java file (be sure [Java](https://www.java.com/en/download/manual.jsp) is installed and properly configured on your computer beforehand):
 
 ```
 git clone https://github.com/RaviTejGuntuku/YahtzeeJava.git
